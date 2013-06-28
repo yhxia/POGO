@@ -56,7 +56,7 @@ public class PogoPress{
 
 //**********************POGO**************************
 	private int[] processPacket(int readPacket) {
-		//System.out.print(Integer.toHexString(readPacket)+" ");
+		System.out.print(Integer.toHexString(readPacket)+" ");
 		int[] result = new int[2];
 		pktData.add(readPacket);
 		if (readPacket == 126) {// 7e
@@ -76,9 +76,10 @@ public class PogoPress{
 				int pktSize = pktData.size();
 				if (pktSize == 39) {
 					//System.out.print("\n-->Normal data...");
-					result = processData(pktData); 
+					result = processData(pktData,0); 
 				} else {
 					System.out.println("-------------->Odd pkt size=" + pktSize);
+					result = processData(pktData,1);
 				}
 				pktData.removeAll(pktData);
 				show7eStart = false;
@@ -97,7 +98,30 @@ public class PogoPress{
 //**********************POGO**************************
 	
 //**********************POGO**************************
-	private int[] processData(List<Integer> pktData) {
+	private int[] processData(List<Integer> pktData,int type) {
+		
+		//deal with 7d 5d case: 7e = 7d 5e   7d = 7d 5d
+		if(type == 1){
+			int pi =0;
+			while(true){
+				if(pktData.get(pi)==125){ // meet 7d
+					if(pktData.get(pi+1)==94){ // meet 5e --> 7e
+						pktData.set(pi, 126);
+						pktData.remove(pi+1);
+					}
+					else if(pktData.get(pi+1)==93){
+						pktData.remove(pi+1);
+					}
+				}
+				pi++;
+				if(pi==pktData.size()) break;
+			}
+			//System.out.println("Done fixing.");
+			//for(int i=0; i<pktData.size(); i++){
+			//	System.out.print(Integer.toHexString(pktData.get(i))+" ");
+			//}
+		}
+		
 		int[] result = new int[2];
 		result[0] = 0;
 		result[1] = 0;
