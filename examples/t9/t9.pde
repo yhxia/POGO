@@ -67,7 +67,7 @@ Serial myPort;  // Create object from Serial class
 PogoPress pogo;
 int val;      // Data received from the serial port
 List<Integer> ids = new ArrayList<Integer>();
-int[] result = new int[2];
+int[][] result = new int[10][2];
 //********************************************************************************** copy above to outside
 
 
@@ -91,16 +91,9 @@ void setup(){
     movers[j] = new Mover(/*random(width),random(height),*/j+1,
                           random(255), random(255), random(255));
   }
-  //设置点初始位置
-  for(int i=1;i<ynum+1;i++){      //第i行
-    for(int j=1;j<xnum+1;j++){    //第j列
-      movers[(i-1)*xnum+j-1].locationy=100*(i-1);//纵坐标
-    }
+  //璁剧疆鐐瑰垵濮嬩綅缃�  for(int i=1;i<ynum+1;i++){      //绗琲琛�    for(int j=1;j<xnum+1;j++){    //绗琷鍒�      movers[(i-1)*xnum+j-1].locationy=100*(i-1);//绾靛潗鏍�    }
   }
-  for(int i=1;i<xnum+1;i++){     //第i列
-    for(int j=1;j<ynum+1;j++){   //第j行
-      movers[(j-1)*xnum+i-1].locationx=100*(i-1);//横坐标
-    }
+  for(int i=1;i<xnum+1;i++){     //绗琲鍒�    for(int j=1;j<ynum+1;j++){   //绗琷琛�      movers[(j-1)*xnum+i-1].locationx=100*(i-1);//妯潗鏍�    }
   }
   // init form
   background(255);
@@ -152,17 +145,16 @@ void mousePressed(){
     */
     
     /*****************************
-    *          获取坐标          *
+    *          鑾峰彇鍧愭爣          *
     *****************************/
-    int fadenum=60;//消逝快慢
+    int fadenum=60;//娑堥�蹇參
     mx=mouseX/100;
     my=mouseY/100;
     if(mx>0&&my>0&&mx<11&&my<6){
     movers[mx-1+(my-1)*xnum].pressure=1;
     movers[mx-1+(my-1)*xnum].fade=fadenum;
     }
-    //周围点
-    if(mx>0&&my>0&&mx<11&&my<6){
+    //鍛ㄥ洿鐐�    if(mx>0&&my>0&&mx<11&&my<6){
     int i=mx-1+(my-1)*xnum;
       if(movers[i].pressure==1){
         if(i+1<50&&i%xnum!=9){
@@ -208,23 +200,24 @@ void mousePressed(){
 void serialEvent(Serial myPort) {
   val = myPort.read();
   result = pogo.getPogoData(val);
-  if(result[0]!=0){
-      showRender(result[0],result[1]);
+  for(int i=0;i<10;i++){
+  	if(result[i][0]!=0){
+    	  showRender(result[i][0],result[i][1]);
+  	}
   }
 }
 
 //********************************************************************************** copy below to outside and finish it
 //POGOPress: the function you should finish. The code below is an example. You just need to deal with the id and index.
 void showRender(int id,int index){
-    int fadenum=60;//消逝快慢
+    int fadenum=60;//娑堥�蹇參
     mx=(id+index)%10;
     my=(id*index)%5;
     if(mx>0&&my>0&&mx<11&&my<6){
     movers[mx-1+(my-1)*xnum].pressure=1;
     movers[mx-1+(my-1)*xnum].fade=fadenum;
     }
-    //周围点
-    if(mx>0&&my>0&&mx<11&&my<6){
+    //鍛ㄥ洿鐐�    if(mx>0&&my>0&&mx<11&&my<6){
     int i=mx-1+(my-1)*xnum;
       if(movers[i].pressure==1){
         if(i+1<50&&i%xnum!=9){

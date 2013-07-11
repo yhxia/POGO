@@ -47,17 +47,17 @@ public class PogoPress{
 	  this.ids = ids;
   }
 //**********************POGO**************************
-  public int[] getPogoData(int readdata) {
-	int[] result= new int[2];
+  public int[][] getPogoData(int readdata) {
+	int[][] result= new int[10][2];
 	result = processPacket(readdata);
 	return result;
   }
 //**********************POGO**************************
 
 //**********************POGO**************************
-	private int[] processPacket(int readPacket) {
+	private int[][] processPacket(int readPacket) {
 		System.out.print(Integer.toHexString(readPacket)+" ");
-		int[] result = new int[2];
+		int[][] result = new int[10][2];
 		pktData.add(readPacket);
 		if (readPacket == 126) {// 7e
 			//System.out.print("7e show!");
@@ -78,7 +78,8 @@ public class PogoPress{
 					//System.out.print("\n-->Normal data...");
 					result = processData(pktData,0); 
 				} else {
-					System.out.println("-------------->Odd pkt size=" + pktSize);
+					if(pktSize>42)
+						System.out.println("-------------->Odd pkt size=" + pktSize);
 					result = processData(pktData,1);
 				}
 				pktData.removeAll(pktData);
@@ -98,7 +99,7 @@ public class PogoPress{
 //**********************POGO**************************
 	
 //**********************POGO**************************
-	private int[] processData(List<Integer> pktData,int type) {
+	private int[][] processData(List<Integer> pktData,int type) {
 		
 		//deal with 7d 5d case: 7e = 7d 5e   7d = 7d 5d
 		if(type == 1){
@@ -122,9 +123,11 @@ public class PogoPress{
 			//}
 		}
 		
-		int[] result = new int[2];
-		result[0] = 0;
-		result[1] = 0;
+		int[][] result = new int[10][2];
+		for(int i=0;i<10;i++){
+			result[i][0] = 0;
+			result[i][1] = 0;
+		}
 		Integer id = pktData.get(4);
 		// print("id="+id);
 		Integer[] r = new Integer[50];
@@ -141,12 +144,12 @@ public class PogoPress{
 				diff[i] += Math.abs(r[(j + 1) * 10 + i] - r[j * 10 + i]);
 			}
 			if (diff[i] > 0) {
-				System.out.println("id=" + id + "No." + Integer.toString(i) + " Press");
+				System.out.print("\nid=" + id + "No." + Integer.toString(i) + " Press");
 				// call the function which you should finish
 				for (int k = 0; k < ids.size(); k++) {
 					if (id == ids.get(k)){
-						result[0] = id;
-						result[1] = i;
+						result[i][0] = id;
+						result[i][1] = i;
 					}
 				}
 			}

@@ -11,3 +11,4 @@ http://www.pogoclass.com
 POGO it！
 
 6-28: 修改了对40个长度数据包的解析
+7-11：修改了传输数据的逻辑
