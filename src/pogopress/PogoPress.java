@@ -26,16 +26,15 @@ package pogopress;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import processing.core.PApplet;
 
 public class PogoPress{
 
 //**********************POGO**************************
-	public  Boolean show7eStart = false;
-	public  Boolean show7eStop = false;
-	public  Boolean show45 = false;
-	public  Boolean isStart = false;
+	//public  Boolean show7eStart = false;
+	//public  Boolean show7eStop = false;
+	//public  Boolean show45 = false;
+	//public  Boolean isStart = false;
 	public  List<Integer> pktData = new ArrayList<Integer>();
 	public  List<Integer> ids = new ArrayList<Integer>();
 //**********************POGO**************************
@@ -47,22 +46,39 @@ public class PogoPress{
 	  this.ids = ids;
   }
 //**********************POGO**************************
-  public int[][] getPogoData(int readdata) {
-	int[][] result= new int[10][2];
-	result = processPacket(readdata);
-	return result;
-  }
-//**********************POGO**************************
-
-//**********************POGO**************************
-	private int[][] processPacket(int readPacket) {
-		System.out.print(Integer.toHexString(readPacket)+" ");
+  public int[][] getPogoData(int readPacket) {
+	    System.out.print(Integer.toHexString(readPacket)+" ");
 		int[][] result = new int[10][2];
 		pktData.add(readPacket);
 		if (readPacket == 126) {// 7e
 			//System.out.print("7e show!");
-
-			if (show7eStart == false) {
+				if(pktData.size()>1){
+					if(pktData.size()==39){
+						if(pktData.get(0)==69){
+							pktData.add(0, 126);
+						}
+						result = processData(pktData,0);
+						pktData.removeAll(pktData);
+					}
+					else if(pktData.size()>39){
+						if(pktData.get(0)==69){
+							pktData.add(0, 126);
+							
+						}
+						result = processData(pktData,1);		
+						if(pktData.size()>2){
+							System.out.println("-------------->Odd pkt size=" + pktData.size());
+						}
+						pktData.removeAll(pktData);
+					}
+					else{
+						//result = processData(pktData,0);
+						System.out.println("-------------->throw Odd pkt size=" + pktData.size());
+						pktData.removeAll(pktData);
+					}
+				}
+			
+/*			if (show7eStart == false) {
 				show7eStart = true;
 				//System.out.print("Start!");
 				pktData.removeAll(pktData);
@@ -86,18 +102,18 @@ public class PogoPress{
 				show7eStart = false;
 				show7eStop = false;
 				show45 = false;
-			}
+			}*/
 		}// 7e show
-		else if (readPacket == 69) {// 45
+/*		else if (readPacket == 69) {// 45
 			// println("7e show!");
 			if (show7eStart == true) {
 				show45 = true;
 			}
-		}
+		}*/
 		return result;
-	}
+  }
 //**********************POGO**************************
-	
+  
 //**********************POGO**************************
 	private int[][] processData(List<Integer> pktData,int type) {
 		
@@ -122,6 +138,13 @@ public class PogoPress{
 			//	System.out.print(Integer.toHexString(pktData.get(i))+" ");
 			//}
 		}
+
+
+		System.out.print("\npogo!!!!\n");
+		for(int i=0; i<pktData.size();i++){
+			System.out.print(Integer.toHexString(pktData.get(i))+" ");
+		}
+		System.out.print("\npogo!!!!\n");
 		
 		int[][] result = new int[10][2];
 		for(int i=0;i<10;i++){
@@ -156,6 +179,5 @@ public class PogoPress{
 		}
 		return result;
 	}
-//**********************POGO**************************
 }
-
+//**********************POGO**************************

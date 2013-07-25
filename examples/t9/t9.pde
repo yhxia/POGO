@@ -91,9 +91,16 @@ void setup(){
     movers[j] = new Mover(/*random(width),random(height),*/j+1,
                           random(255), random(255), random(255));
   }
-  //璁剧疆鐐瑰垵濮嬩綅缃�  for(int i=1;i<ynum+1;i++){      //绗琲琛�    for(int j=1;j<xnum+1;j++){    //绗琷鍒�      movers[(i-1)*xnum+j-1].locationy=100*(i-1);//绾靛潗鏍�    }
+  //璁剧疆鐐瑰垵濮嬩綅缃� 
+   for(int i=1;i<ynum+1;i++){      //绗琲琛�    
+   for(int j=1;j<xnum+1;j++){    //绗琷鍒�      
+   movers[(i-1)*xnum+j-1].locationy=100*(i-1);//绾靛潗鏍�    
+   }
   }
-  for(int i=1;i<xnum+1;i++){     //绗琲鍒�    for(int j=1;j<ynum+1;j++){   //绗琷琛�      movers[(j-1)*xnum+i-1].locationx=100*(i-1);//妯潗鏍�    }
+  for(int i=1;i<xnum+1;i++){     //绗琲鍒�   
+   for(int j=1;j<ynum+1;j++){   //绗琷琛�      
+   movers[(j-1)*xnum+i-1].locationx=100*(i-1);//妯潗鏍�    
+   }
   }
   // init form
   background(255);
@@ -154,7 +161,8 @@ void mousePressed(){
     movers[mx-1+(my-1)*xnum].pressure=1;
     movers[mx-1+(my-1)*xnum].fade=fadenum;
     }
-    //鍛ㄥ洿鐐�    if(mx>0&&my>0&&mx<11&&my<6){
+    //鍛ㄥ洿鐐�   
+     if(mx>0&&my>0&&mx<11&&my<6){
     int i=mx-1+(my-1)*xnum;
       if(movers[i].pressure==1){
         if(i+1<50&&i%xnum!=9){
@@ -217,7 +225,8 @@ void showRender(int id,int index){
     movers[mx-1+(my-1)*xnum].pressure=1;
     movers[mx-1+(my-1)*xnum].fade=fadenum;
     }
-    //鍛ㄥ洿鐐�    if(mx>0&&my>0&&mx<11&&my<6){
+    //鍛ㄥ洿鐐�  
+      if(mx>0&&my>0&&mx<11&&my<6){
     int i=mx-1+(my-1)*xnum;
       if(movers[i].pressure==1){
         if(i+1<50&&i%xnum!=9){
